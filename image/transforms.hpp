@@ -24,10 +24,9 @@ std::unique_ptr<LazyImage<Image, P, Q>> map(const Image &base, const std::functi
 }
 */
 
-
-template <template <typename P> class I, typename P, typename Q>
-std::unique_ptr<LazyImage<Q, I<P>, P>> map(const I<P> &base, const std::function<Q(P)> &func) {
-    return std::unique_ptr<LazyImage<Q, I<P>, P>>(new LazyImage<Q, I<P>, P>(base, func));
+template <typename Q, typename I, typename P>
+std::unique_ptr<LazyImage<Q, I, P>> map(const I &base, const std::function<Q(P)> &func) {
+    return std::unique_ptr<LazyImage<Q, I, P>>(new LazyImage<Q, I, P>(base, func));
 }
 }
 #endif

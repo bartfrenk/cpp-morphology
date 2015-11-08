@@ -9,10 +9,12 @@
 
 namespace Image {
 
-template <typename Q, typename Image, typename P>
+template <typename Q, typename I, typename P>
 class LazyImage {
 public:
-    LazyImage(const Image &base, const std::function<Q(P)> &func) : mBase(base), mFunc(func) {}
+    typedef Q pixel_type;
+
+    LazyImage(const I &base, const std::function<Q(P)> &func) : mBase(base), mFunc(func) {}
 
     // TODO: allow for manifesting cropped image
     std::unique_ptr<StrictImage<Q>> manifest() const;
@@ -22,12 +24,12 @@ public:
 
     Q get(const size_t r, const size_t c) const { return mFunc(mBase.get(r, c)); }
 private:
-    const Image &mBase;
+    const I &mBase;
     const std::function<Q(P)>& mFunc;
 };
 
-template <typename Q, typename Image, typename P>
-std::unique_ptr<StrictImage<Q>> LazyImage<Q, Image, P>::manifest() const {
+template <typename Q, typename I, typename P>
+std::unique_ptr<StrictImage<Q>> LazyImage<Q, I, P>::manifest() const {
     // TODO: optimize by iterating over linear pixel array
     auto strict = std::unique_ptr<StrictImage<Q>>(new StrictImage<Q>(rows(), columns()));
     for (size_t r = 0; r != rows(); ++r)

@@ -4,7 +4,7 @@
 #include "image/strict.hpp"
 #include "image/transforms.hpp"
 #include "geometry/point.hpp"
-//#include "filter/kernel.hpp"
+#include "filter/kernel.hpp"
 #include "filter/transforms.hpp"
 
 using std::cout;
@@ -30,9 +30,10 @@ void test_base() {
     cout << std::endl;
 }
 
-/*
 void test_filter() {
     StrictImage<bool> sourceImage(4, 4);
+    sourceImage.set(1, 1, true);
+    sourceImage.set(1, 2, true);
     StrictImage<bool> kernelImage(3, 3);
     kernelImage.set(0, 1, true);
     kernelImage.set(1, 0, true);
@@ -42,11 +43,15 @@ void test_filter() {
     write(cout, sourceImage);
     write(cout, kernelImage);
     Image::Point center(1, 1);
-
+    auto kernel = Filter::createKernel(kernelImage, center);
+    auto result = Filter::apply(sourceImage, *kernel,
+                                [](bool p, bool q) { return p && q; },
+                                [](bool acc, bool p) { return p || acc; },
+                                false);
+    write(cout, *result);
 }
-*/
 
 int main() {
-
+    test_filter();
     return 0;
 }

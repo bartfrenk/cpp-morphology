@@ -7,14 +7,18 @@
 
 namespace Filter {
 
-template <typename I, typename P>
+template <typename I>
 class Kernel {
+public:
+    typedef typename I::pixel_type pixel_type;
+
     Kernel(const I &kernel, const Image::Point center) : mKernel(kernel), mCenter(center) {};
-    P get(const int row, const int column) {
+    typename I::pixel_type get(const int row, const int column) const {
+
         return mKernel.get(mCenter.x + row, mCenter.y + column);
     }
-    Image::Box box() {
-        return Box(mCenter, mKernel.rows(), mKernel.columns());
+    Image::Box box() const {
+        return Image::Box(mCenter, mKernel.rows(), mKernel.columns());
     }
 private:
     const I &mKernel;
@@ -22,10 +26,10 @@ private:
 
 };
 
-template <typename P>
+// TODO: make this instantiate with I type constructor LazyImage
 template <typename I>
-std::unique_ptr<Kernel<I, P>> createKernel(const I &kernel, const Image::Point center) {
-    return std::unique_ptr<Kernel<I, P>>(new Kernel<I, P>(kernel, center));
+std::unique_ptr<Kernel<I>> createKernel(const I &kernel, const Image::Point center) {
+    return std::unique_ptr<Kernel<I>>(new Kernel<I>(kernel, center));
 };
 
 }
