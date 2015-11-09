@@ -18,10 +18,9 @@ namespace Filter {
  * @param foldFn function that folds the combined results into a single pixel of type Q
  */
 template <typename I, typename K, typename Z, typename F, typename P>
-auto apply(const I &img, const K &ker, const F &zip, const Z &fold, const P unit)
-    -> std::unique_ptr<Image::StrictImage<decltype(fold(unit, zip(img.get(0,0), ker.get(0,0))))>>
+std::unique_ptr<Image::StrictImage<P>>
+apply(const I &img, const K &ker, const Z &zip, const F &fold, const P unit)
 {
-
     using Image::StrictImage;
 
     Image::Box bounds = ker.box();
