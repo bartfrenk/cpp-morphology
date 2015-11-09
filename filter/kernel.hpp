@@ -10,11 +10,10 @@ namespace Filter {
 template <typename I>
 class Kernel {
 public:
-    typedef typename I::pixel_type pixel_type;
+    typedef typename I::pixel_type pixel_t;
 
     Kernel(const I &kernel, const Image::Point center) : mKernel(kernel), mCenter(center) {};
-    typename I::pixel_type get(const int row, const int column) const {
-
+    pixel_t get(const int row, const int column) const {
         return mKernel.get(mCenter.x + row, mCenter.y + column);
     }
     Image::Box box() const {

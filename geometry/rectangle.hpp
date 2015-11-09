@@ -19,8 +19,8 @@ template <>
 struct Rectangle<2, int> {
     Rectangle(const Point<2, int> lo, const Point<2, int> hi) : lo(lo), hi(hi) {};
     Rectangle(const Point<2, size_t> center, const size_t rows, const size_t columns) :
-        Rectangle(Point<2, int>(center.x - rows, center.y - columns),
-                  Point<2, int>(center.x + rows, center.y + columns)) {};
+        Rectangle(Point<2, int>(-center.x, -center.y),
+                  Point<2, int>(rows - center.x - 1, columns - center.y - 1)) {};
     const Point<2, int> lo;
     const Point<2, int> hi;
 };
