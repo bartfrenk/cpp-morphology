@@ -6,6 +6,7 @@
 #include "geometry/point.hpp"
 #include "filter/kernel.hpp"
 #include "filter/transforms.hpp"
+#include "image/bitmap.hpp"
 
 using std::cout;
 using namespace Image;
@@ -30,6 +31,11 @@ void test_base() {
     cout << std::endl;
 }
 
+void test_bitmap(const std::string fileName) {
+    auto bitmap = Bitmap::load(fileName);
+    bitmap->diagnostics(cout);
+}
+
 void test_filter() {
     StrictImage<bool> sourceImage(4, 4);
     sourceImage.set(1, 1, true);
@@ -51,7 +57,9 @@ void test_filter() {
     write(cout, *result);
 }
 
-int main() {
-    test_filter();
+int main(int argc, char* argv[]) {
+    if (argc > 1) {
+        test_bitmap(argv[1]);
+    }
     return 0;
 }

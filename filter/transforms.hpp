@@ -14,8 +14,8 @@ namespace Filter {
  *
  * @param img the image to which to apply the filter
  * @param kernel the kernel of the filter
- * @param zipFn function that combines a pixel of the image with a pixel of the kernel
- * @param foldFn function that folds the combined results into a single pixel of type Q
+ * @param zip function that combines a pixel of the image with a pixel of the kernel
+ * @param fold function that folds the combined results into a single pixel of type Q
  */
 template <typename I, typename K, typename Z, typename F, typename P>
 std::unique_ptr<Image::StrictImage<P>>
