@@ -19,8 +19,8 @@ public:
     // TODO: allow for manifesting cropped image
     std::unique_ptr<StrictImage<Q>> manifest() const;
 
-    size_t rows() const { return mBase.rows(); }
-    size_t columns() const { return mBase.columns(); }
+    size_t height() const { return mBase.height(); }
+    size_t width() const { return mBase.width(); }
 
     Q get(const size_t r, const size_t c) const { return mFunc(mBase.get(r, c)); }
 private:
@@ -31,9 +31,9 @@ private:
 template <typename Q, typename I, typename P>
 std::unique_ptr<StrictImage<Q>> LazyImage<Q, I, P>::manifest() const {
     // TODO: optimize by iterating over linear pixel array
-    auto strict = std::unique_ptr<StrictImage<Q>>(new StrictImage<Q>(rows(), columns()));
-    for (size_t r = 0; r != rows(); ++r)
-        for (size_t c = 0; c != columns(); ++c)
+    auto strict = std::unique_ptr<StrictImage<Q>>(new StrictImage<Q>(height(), width()));
+    for (size_t r = 0; r != height(); ++r)
+        for (size_t c = 0; c != width(); ++c)
             strict->set(r, c, get(r, c));
     return strict;
 }

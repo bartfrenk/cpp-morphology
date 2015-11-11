@@ -8,7 +8,7 @@ CC = g++
 
 all: client.out
 
-client.out: client.cpp
+client.out: client.cpp image/rgb.cpp
 	$(CC) -o $@ $^ $(OPTIONS) $(LIBS)
 
 clean:
