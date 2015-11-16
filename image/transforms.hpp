@@ -8,25 +8,19 @@
 
 namespace Image {
 
-template <typename Image>
-void write(std::ostream& os, const Image &img) {
-    for (size_t r = 0; r != img.rows(); ++r) {
-        for (size_t c = 0; c != img.columns(); ++c)
-            os << img.get(r, c) << " ";
+template <typename I>
+void write(std::ostream& os, const I &img) {
+    for (size_t y = 0; y != img.height(); ++y) {
+        for (size_t x = 0; x != img.width(); ++x)
+            os << img.get(x, y) << " ";
         os << std::endl;
     }
 }
-
-/*
-template <typename Image, typename P, typename Q>
-std::unique_ptr<LazyImage<Image, P, Q>> map(const Image &base, const std::function<Q(P)> &func) {
-    return std::unique_ptr<LazyImage<Image, P, Q>>(new LazyImage<Image, P, Q>(base, func));
-}
-*/
 
 template <typename Q, typename I, typename P>
 std::unique_ptr<LazyImage<Q, I, P>> map(const I &base, const std::function<Q(P)> &func) {
     return std::unique_ptr<LazyImage<Q, I, P>>(new LazyImage<Q, I, P>(base, func));
 }
+
 }
 #endif
