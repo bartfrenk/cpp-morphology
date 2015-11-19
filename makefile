@@ -1,15 +1,16 @@
-INCLUDES = $(shell pkg-config lua5.1 --cflags)
 LIBS = -lfreeimage
-OPTIONS = -std=c++11
-OBJECTS = freeimage.o geometry.o
+CFLAGS = -std=c++11 -g
+OBJECTS = client.o image/strict.o image/base.o image/pixel.o utils/log.o
 CC = g++
 
-.PHONY: all clean
+.PHONY: clean
 
-all: client.out
+%.o: %.cpp
+	$(CC) -c -o $@ $(CFLAGS) $<
 
-client.out: client.cpp image/rgb.cpp
-	$(CC) -o $@ $^ $(OPTIONS) $(LIBS)
+client.out: $(OBJECTS)
+	$(CC) -o $@ $^ $(LIBS)
+
 
 clean:
-	@rm -rf *.o *.out
+	@rm -rf $(OBJECTS) client.out

@@ -1,10 +1,13 @@
 #include "base.hpp"
+#include "../utils/log.hpp"
 #include <iostream>
+
+using Utils::log;
 
 namespace Image {
 
 BaseImage::~BaseImage() {
-    std::cout << "~BaseImage() [mPixels = " << mPixels << "]\n";
+    log << "~BaseImage() [mPixels = " << mPixels << "]\n";
     FreeImage_Unload(mPixels);
 }
 
@@ -23,6 +26,12 @@ BaseImage::BaseImage(const size_t width, const size_t height, const int bpp) {
 BaseImage::BaseImage(FIBITMAP * const pixels) : mPixels(pixels) {
     if (mPixels != nullptr)
         init();
+}
+
+BaseImage::BaseImage(const BaseImage &&img) : mPixels(img.mPixels) {
+    log << "BaseImage(const BaseImage&&)\n";
+    // TODO: no need to query, take from img
+    init();
 }
 
 BaseImage& BaseImage::operator=(const BaseImage &img) {

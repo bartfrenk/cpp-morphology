@@ -1,44 +1,46 @@
-#ifndef FREE_IMAGE_HPP
-#define FREE_IMAGE_HPP
+#ifndef IMAGE_STRICT_HPP
+#define IMAGE_STRICT_HPP
 
 #include <cstddef>
 #include <string>
-#include <iostream>
-#include <iomanip>
 
-#include "common.hpp"
+#include "base.hpp"
+#include "pixel.hpp"
 
 namespace Image {
 
-typedef BYTE byte;
-
 template <typename P>
-class FreeImage {
+class StrictImage {
 public:
 };
 
-struct RGB {
-    RGB(byte red, byte green, byte blue) : red(red), green(green), blue(blue) {};
-    byte red;
-    byte green;
-    byte blue;
-};
-
-std::ostream& operator<<(std::ostream& os, const RGB& pixel);
 
 template <>
-class FreeImage<RGB> : public BaseImage {
+class StrictImage<RGB> : public BaseImage {
 public:
-    FreeImage(const size_t width, const size_t height);
-    FreeImage(const std::string filename);
-    FreeImage(const FreeImage<RGB> &img);
+    using pixel_t = RGB;
+
+    StrictImage(const size_t width, const size_t height);
+    StrictImage(const std::string filename);
+    StrictImage(const StrictImage<RGB> &img);
+    StrictImage(const StrictImage<RGB> &&img);
 
     RGB get(const size_t x, const size_t y) const;
     void set(const size_t x, const size_t y, const RGB pixel);
+};
 
-    bool contains(const size_t x, const size_t y) const {
-        return x <= mWidth && y <= mHeight;
-    }
+template <>
+class StrictImage<Gray> : public BaseImage {
+public:
+    using pixel_t = Gray;
+
+    StrictImage(const size_t width, const size_t height);
+    StrictImage(const std::string filename);
+    StrictImage(const StrictImage<Gray> &img);
+    StrictImage(const StrictImage<Gray> &&img);
+
+    Gray get(const size_t x, const size_t y) const;
+    void set(const size_t x, const size_t y, const Gray pixel);
 };
 
 

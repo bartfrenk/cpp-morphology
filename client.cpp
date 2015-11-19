@@ -3,16 +3,12 @@
 
 #include "image/strict.hpp"
 #include "image/transforms.hpp"
-#include "geometry/point.hpp"
-#include "filter/kernel.hpp"
-#include "filter/transforms.hpp"
-#include "image/bitmap.hpp"
 
 using std::cout;
 using namespace Image;
 
 
-
+/*
 void test_base() {
     StrictImage<bool> img(4, 4);
     write(cout, img);
@@ -30,12 +26,18 @@ void test_base() {
     write(cout, *map(*neg, negate));
     cout << std::endl;
 }
+*/
 
-void test_bitmap(const std::string fileName) {
-    auto bitmap = Bitmap::load(fileName);
-    bitmap->diagnostics(cout);
+
+void test_freeimage() {
+    auto base = std::make_shared<StrictImage<RGB>>(10, 10);
+    base->set(1, 1, RGB(0xFF, 0x00, 0x00));
+    writeImage(cout, *base);
+    auto lazy = map(base, std::function<Gray(RGB)>(average));
+    writeImage(cout, lazy);
 }
 
+/*
 void test_filter() {
     StrictImage<bool> sourceImage(4, 4);
     sourceImage.set(1, 1, true);
@@ -56,10 +58,11 @@ void test_filter() {
                                 false);
     write(cout, *result);
 }
+*/
 
-int main(int argc, char* argv[]) {
-    if (argc > 1) {
-        test_bitmap(argv[1]);
-    }
+int main() {
+    FreeImage_Initialise();
+    test_freeimage();
+    FreeImage_DeInitialise();
     return 0;
 }

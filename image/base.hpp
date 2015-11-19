@@ -10,12 +10,17 @@ class BaseImage {
 public:
     size_t width() const { return mWidth; }
     size_t height() const { return mHeight; }
+    bool contains(const size_t x, const size_t y) const {
+        return x <= mWidth && y <= mHeight;
+    }
     virtual ~BaseImage();
     BaseImage& operator=(const BaseImage &img);
 protected:
     BaseImage(const FREE_IMAGE_FORMAT fif, const std::string filename);
     BaseImage(const size_t width, const size_t height, const int bpp);
     BaseImage(FIBITMAP * const pixels);
+    BaseImage(const BaseImage &&img);
+
     void init();
     FIBITMAP *mPixels;
     unsigned int mPitch;
