@@ -35,6 +35,8 @@ void test_freeimage() {
     writeImage(cout, *base);
     auto lazy = map(base, std::function<Gray(RGB)>(average));
     writeImage(cout, lazy);
+    auto strict = lazy.manifest();
+    writeImage(cout, strict);
 }
 
 /*

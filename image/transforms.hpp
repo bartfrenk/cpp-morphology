@@ -29,8 +29,7 @@ void writeImage(std::ostream& os, const I &img) {
 template <typename Q, typename I, typename P>
 LazyImage<Q, I, P> map(const std::shared_ptr<I> img, const std::function<Q(P)> &func) {
     log << "map(std::shared_ptr<I>, const std::function<Q(P)>&)\n";
-    auto x = LazyImage<Q, I, P>(img, func);
-    return x;
+    return LazyImage<Q, I, P>(img, func);
 }
 
 // TODO: implement crop: I -> Box -> LazyImage

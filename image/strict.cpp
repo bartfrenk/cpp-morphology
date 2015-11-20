@@ -66,7 +66,7 @@ Gray StrictImage<Gray>::get(const size_t x, const size_t y) const {
 }
 
 void StrictImage<Gray>::set(const size_t x, const size_t y, const Gray pixel) {
-    size_t index = y * mPitch + 3 * x;
+    size_t index = y * mPitch + x;
     BYTE *buffer = (BYTE *) FreeImage_GetBits(mPixels);
     buffer[index] = pixel;
 }

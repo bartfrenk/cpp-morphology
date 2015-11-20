@@ -26,7 +26,7 @@ public:
     LazyImage<Q, I, P>& operator=(const LazyImage<Q, I, P> &&img);
 
     // TODO: allow for manifesting cropped image
-    StrictImage<Q>&& manifest() const;
+    StrictImage<Q> manifest() const;
 
     size_t height() const { return mBase->height(); }
     size_t width() const { return mBase->width(); }
@@ -39,12 +39,13 @@ private:
 };
 
 template <typename Q, typename I, typename P>
-StrictImage<Q>&& LazyImage<Q, I, P>::manifest() const {
-    StrictImage<Q> strict(height(), width());
+StrictImage<Q> LazyImage<Q, I, P>::manifest() const {
+    StrictImage<Q> strict(width(), height());
     // TODO: optimize by iterating over linear pixel array
     for (size_t x = 0; x != height(); ++x)
-        for (size_t y = 0; y != width(); ++y)
+        for (size_t y = 0; y != width(); ++y) {
             strict.set(x, y, get(x, y));
+        }
     return strict;
 }
 
