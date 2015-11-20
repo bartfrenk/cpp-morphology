@@ -3,32 +3,34 @@
 
 #include <memory>
 
-#include "../image/base.hpp"
+#include "../image/utils.hpp"
 
 namespace Filter {
 
 template <typename I>
 class Kernel {
 public:
-    typedef typename I::pixel_type pixel_t;
+    using pixel_t = typename I::pixel_t;
 
     Kernel(const I &kernel, const Image::Point center) : mKernel(kernel), mCenter(center) {};
-    pixel_t get(const int row, const int column) const {
-        return mKernel.get(mCenter.x + row, mCenter.y + column);
+    pixel_t get(const int x, const int y) const {
+        return mKernel.get(mCenter.x + x, mCenter.y + y);
     }
     Image::Box box() const {
-        return Image::Box(mCenter, mKernel.rows(), mKernel.columns());
+        return Image::Box(mCenter, mKernel.height(), mKernel.width());
     }
 private:
+    // TODO: change this to the appropriate vector type,
+    // since we do not need save and load functionality for
+    // kernels.
     const I &mKernel;
     const Image::Point mCenter;
 
 };
 
-// TODO: make this instantiate with I type constructor LazyImage
 template <typename I>
-std::unique_ptr<Kernel<I>> createKernel(const I &kernel, const Image::Point center) {
-    return std::unique_ptr<Kernel<I>>(new Kernel<I>(kernel, center));
+Kernel<I> createKernel(const I &img, const Image::Point center) {
+    return Kernel<I>(img, center);
 };
 
 }

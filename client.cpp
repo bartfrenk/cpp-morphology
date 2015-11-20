@@ -3,31 +3,12 @@
 
 #include "image/strict.hpp"
 #include "image/transforms.hpp"
+#include "image/utils.hpp"
+#include "filter/kernel.hpp"
+#include "filter/transforms.hpp"
 
 using std::cout;
 using namespace Image;
-
-
-/*
-void test_base() {
-    StrictImage<bool> img(4, 4);
-    write(cout, img);
-    cout << std::endl;
-
-    std::function<bool(bool)> negate = [](bool p){
-        cout << "*";
-        return !p;
-    };
-    auto neg = map(img, negate);
-
-    write(cout, *neg);
-    cout << std::endl;
-
-    write(cout, *map(*neg, negate));
-    cout << std::endl;
-}
-*/
-
 
 void test_freeimage() {
     auto base = std::make_shared<StrictImage<RGB>>(10, 10);
@@ -37,30 +18,19 @@ void test_freeimage() {
     writeImage(cout, lazy);
     auto strict = lazy.manifest();
     writeImage(cout, strict);
-}
 
-/*
-void test_filter() {
-    StrictImage<bool> sourceImage(4, 4);
-    sourceImage.set(1, 1, true);
-    sourceImage.set(1, 2, true);
-    StrictImage<bool> kernelImage(3, 3);
-    kernelImage.set(0, 1, true);
-    kernelImage.set(1, 0, true);
-    kernelImage.set(1, 1, true);
-    kernelImage.set(1, 2, true);
-    kernelImage.set(2, 1, true);
-    write(cout, sourceImage);
-    write(cout, kernelImage);
-    Image::Point center(1, 1);
-    auto kernel = Filter::createKernel(kernelImage, center);
-    auto result = Filter::apply(sourceImage, *kernel,
-                                [](bool p, bool q) { return p && q; },
-                                [](bool acc, bool p) { return p || acc; },
-                                false);
-    write(cout, *result);
+    StrictImage<Gray> img(3, 3);
+    img.set(0, 0, 1);
+    img.set(1, 1, 1);
+    img.set(1, 2, 1);
+    writeImage(cout, img);
+    auto kernel = Filter::createKernel(img, Image::Point(1, 1));
+    auto result = Filter::apply(strict, kernel,
+                                [](Gray p, Gray q) { return p * q + 1; },
+                                [](Gray acc, Gray p) { return (Gray) p + acc; },
+                                (Gray) 0);
+    writeImage(cout, result);
 }
-*/
 
 int main() {
     FreeImage_Initialise();
