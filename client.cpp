@@ -19,14 +19,12 @@ void test_freeimage() {
     auto strict = lazy.manifest();
     writeImage(cout, strict);
 
-    StrictImage<Gray> img(3, 3);
-    img.set(0, 0, 1);
-    img.set(1, 1, 1);
-    img.set(1, 2, 1);
-    writeImage(cout, img);
-    auto kernel = Filter::createKernel(img, Image::Point(1, 1));
+    Gray data[] = {1, 0, 1,
+                   1, 0, 1,
+                   1, 0, 1};
+    Filter::Kernel<Gray> kernel(3, 3, data, Image::Point(1, 1));
     auto result = Filter::apply(strict, kernel,
-                                [](Gray p, Gray q) { return p * q + 1; },
+                                [](Gray p, Gray q) { return p * q; },
                                 [](Gray acc, Gray p) { return (Gray) p + acc; },
                                 (Gray) 0);
     writeImage(cout, result);

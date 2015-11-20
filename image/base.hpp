@@ -10,8 +10,8 @@ class BaseImage {
 public:
     size_t width() const { return mWidth; }
     size_t height() const { return mHeight; }
-    bool contains(const size_t x, const size_t y) const {
-        return x <= mWidth && y <= mHeight;
+    bool contains(const int x, const int y) const {
+        return 0 <= x && x < (int) mWidth && 0 <= y && y < (int) mHeight;
     }
     virtual ~BaseImage();
     BaseImage& operator=(const BaseImage &img);
