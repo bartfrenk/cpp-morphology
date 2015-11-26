@@ -11,6 +11,11 @@ using std::cout;
 using std::endl;
 using namespace Image;
 
+template <typename T>
+T id(T t) {
+    return t;
+}
+
 void test_filter() {
     auto base = std::make_shared<StrictImage<RGB>>(10, 10);
     base->set(1, 1, RGB(0xFF, 0x00, 0x00));
@@ -27,13 +32,24 @@ void test_filter() {
     auto result = Filter::apply(strict, kernel,
                                 [](Gray p, Gray q) { return p * q; },
                                 [](Gray acc, Gray p) { return (Gray) p + acc; },
-                                (Gray) 0);
+                                id<Gray>, (Gray) 0);
     writeImage(cout, result);
+}
+
+Filter::Kernel<double> averagingKernel(const int n) {
+    size_t m = n * n;
+    double *matrix = new double[m];
+    for (size_t i = 0; i != m; ++i) {
+        matrix[i] = 1.0 / (double) m;
+    }
+    return Filter::Kernel<double>(n, n, matrix, Image::Point(1, 1));
 }
 
 void test_io(const std::string srcname, const std::string destname) {
     auto src = std::make_shared<StrictImage<RGB>>(srcname);
-    map(src, std::function<Gray(RGB)>(average)).manifest().save(destname);
+    auto intermediate = map(src, std::function<Gray(RGB)>(average)).manifest();
+    auto dest = Filter::linear(intermediate, averagingKernel(12));
+    dest.save(destname);
 }
 
 int main(int argc, char **argv) {

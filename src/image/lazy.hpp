@@ -32,6 +32,11 @@ public:
     size_t width() const { return mBase->width(); }
 
     Q get(const size_t x, const size_t y) const { return mFunc(mBase->get(x, y)); }
+    bool contains(const int x, const int y) const {
+        int w = (int) width();
+        int h = (int) height();
+        return 0 <= x && x < (int) w && 0 <= y && y < (int) h;
+    }
 
 private:
     std::shared_ptr<I> mBase;
