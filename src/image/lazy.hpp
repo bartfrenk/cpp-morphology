@@ -41,9 +41,11 @@ private:
 template <typename Q, typename I, typename P>
 StrictImage<Q> LazyImage<Q, I, P>::manifest() const {
     StrictImage<Q> strict(width(), height());
-    // TODO: optimize by iterating over linear pixel array
-    for (size_t x = 0; x != height(); ++x)
-        for (size_t y = 0; y != width(); ++y) {
+    size_t w = width();
+    size_t h = height();
+
+    for (size_t x = 0; x != w; ++x)
+        for (size_t y = 0; y != h; ++y) {
             strict.set(x, y, get(x, y));
         }
     return strict;

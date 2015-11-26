@@ -49,4 +49,8 @@ void BaseImage::init() {
     mHeight = FreeImage_GetHeight(mPixels);
 }
 
+void BaseImage::save(const FREE_IMAGE_FORMAT fif, const std::string filename) const {
+    FreeImage_Save(fif, mPixels, filename.c_str());
+}
+
 }

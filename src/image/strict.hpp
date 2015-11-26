@@ -25,8 +25,11 @@ public:
     StrictImage(const StrictImage<RGB> &img);
     StrictImage(const StrictImage<RGB> &&img);
 
+    void save(const std::string filename) const;
     RGB get(const size_t x, const size_t y) const;
     void set(const size_t x, const size_t y, const RGB pixel);
+private:
+    static const FREE_IMAGE_FORMAT format;
 };
 
 template <>
@@ -39,8 +42,11 @@ public:
     StrictImage(const StrictImage<Gray> &img);
     StrictImage(const StrictImage<Gray> &&img);
 
+    void save(const std::string filename) const;
     Gray get(const size_t x, const size_t y) const;
     void set(const size_t x, const size_t y, const Gray pixel);
+private:
+    static const FREE_IMAGE_FORMAT format;
 };
 
 

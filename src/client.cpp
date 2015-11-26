@@ -8,9 +8,10 @@
 #include "filter/transforms.hpp"
 
 using std::cout;
+using std::endl;
 using namespace Image;
 
-void test_freeimage() {
+void test_filter() {
     auto base = std::make_shared<StrictImage<RGB>>(10, 10);
     base->set(1, 1, RGB(0xFF, 0x00, 0x00));
     writeImage(cout, *base);
@@ -30,9 +31,18 @@ void test_freeimage() {
     writeImage(cout, result);
 }
 
-int main() {
+void test_io(const std::string srcname, const std::string destname) {
+    auto src = std::make_shared<StrictImage<RGB>>(srcname);
+    map(src, std::function<Gray(RGB)>(average)).manifest().save(destname);
+}
+
+int main(int argc, char **argv) {
     FreeImage_Initialise();
-    test_freeimage();
+    if (argc < 2) {
+        cout << "Syntax: " << argv[0] << " <input file> <output file>\n";
+        return 0;
+    }
+    test_io(argv[1], argv[2]);
     FreeImage_DeInitialise();
     return 0;
 }

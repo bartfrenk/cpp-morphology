@@ -22,6 +22,8 @@ protected:
     BaseImage(const BaseImage &&img);
 
     void init();
+    void save(const FREE_IMAGE_FORMAT fif, const std::string filename) const;
+
     FIBITMAP *mPixels;
     unsigned int mPitch;
     unsigned int mWidth;
