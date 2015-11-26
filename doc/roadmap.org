@@ -1,0 +1,3 @@
+
+* Establish baseline performance profile for 'linear'
+* Implement conversion from binary pixel images to run-length encoded binary images
