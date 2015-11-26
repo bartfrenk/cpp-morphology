@@ -1,5 +1,5 @@
 
-C++ image processing framework.
+## C++ image processing library
 
 Personal practice project that serves to purposes:
 * To get acquinted with C++ 11 and the template system.
