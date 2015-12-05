@@ -1,34 +1,29 @@
-#ifndef IMAGE_BASE_HPP
-#define IMAGE_BASE_HPP
+#ifndef IMAGE_UTILS_HPP
+#define IMAGE_UTILS_HPP
 
-#include <FreeImage.h>
-#include <string>
+#include <cstddef>
+#include "../geometry/point.hpp"
+#include "../geometry/box.hpp"
 
 namespace Image {
 
-class BaseImage {
-public:
-    size_t width() const { return mWidth; }
-    size_t height() const { return mHeight; }
-    bool contains(const int x, const int y) const {
-        return 0 <= x && x < (int) mWidth && 0 <= y && y < (int) mHeight;
-    }
-    virtual ~BaseImage();
-    BaseImage& operator=(const BaseImage &img);
-protected:
-    BaseImage(const FREE_IMAGE_FORMAT fif, const std::string filename);
-    BaseImage(const size_t width, const size_t height, const int bpp);
-    BaseImage(FIBITMAP * const pixels);
-    BaseImage(const BaseImage &&img);
+template <typename T>
+using Point = Geometry::Point<2, T>;
 
-    void init();
-    void save(const FREE_IMAGE_FORMAT fif, const std::string filename) const;
+template <typename T>
+using Domain = Geometry::Box<2, T>;
 
-    FIBITMAP *mPixels;
-    unsigned int mPitch;
-    unsigned int mWidth;
-    unsigned int mHeight;
-};
+template <typename T>
+constexpr T width(const Domain<T> &domain) {
+    return domain.hi.x - domain.lo.x;
+}
+
+template <typename T>
+constexpr T height(const Domain<T> &domain) {
+    return domain.hi.y - domain.lo.y;
+}
+
 
 }
+
 #endif

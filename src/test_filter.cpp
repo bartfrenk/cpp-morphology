@@ -18,7 +18,7 @@ T id(T t) {
 
 void test_filter() {
     auto base = std::make_shared<StrictImage<RGB>>(10, 10);
-    base->set(1, 1, RGB(0xFF, 0x00, 0x00));
+    (*base)(1, 1) = RGB(0xFF, 0x00, 0x00);
     writeImage(cout, *base);
     auto lazy = map(base, std::function<Gray(RGB)>(average));
     writeImage(cout, lazy);

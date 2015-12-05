@@ -16,12 +16,12 @@ std::ostream& operator<<(std::ostream& os, const RGB& pixel) {
 }
 
 template <>
-void writePixel<Gray>(std::ostream &os, const Gray &pixel) {
+void writePixel<Intensity>(std::ostream &os, const Intensity &pixel) {
     os.setf(std::ios::hex, std::ios::basefield);
     os << std::setfill('0') << std::setw(2) << (int) pixel;
 }
 
-Gray average(const RGB& rgb) {
+Intensity average(const RGB& rgb) {
     return (rgb.red + rgb.green + rgb.blue) / 3;
 }
 

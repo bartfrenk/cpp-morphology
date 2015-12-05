@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../image/utils.hpp"
+using Image::coord_t;
 
 namespace Filter {
 
@@ -13,30 +14,31 @@ class Kernel {
 public:
     using pixel_t = P;
 
-    Kernel(const size_t width, const size_t height, const P pixels[], const Image::Point center) :
+    Kernel(const coord_t width, const coord_t height, const P pixels[], const Image::Point center) :
         mPixels(width * height), mCenter(center), mWidth(width), mHeight(height)
     {
         set(pixels);
     };
 
-    pixel_t get(const int x, const int y) const {
-        return mPixels[linearIndex(mCenter.x + x, mCenter.y + y)];
-    }
-
-
+    pixel_t operator()(const coord_t x, const coord_t y) const;
     Image::Box box() const;
 private:
-    size_t linearIndex(const size_t x, const size_t y) const {
+    size_t linearIndex(const coord_t x, const coord_t y) const {
         return y * mWidth + x;
     }
     void set(const P pixels[]);
 
     std::vector<P> mPixels;
     const Image::Point mCenter;
-    const size_t mWidth;
-    const size_t mHeight;
+    const coord_t mWidth;
+    const coord_t mHeight;
 
 };
+
+template <typename P>
+P Kernel<P>::operator()(const coord_t x, const coord_t y) const {
+    return mPixels[linearIndex(mCenter.x + x, mCenter.y + y)];
+}
 
 template <typename P>
 Image::Box Kernel<P>::box() const {

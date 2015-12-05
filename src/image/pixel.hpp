@@ -16,7 +16,7 @@ struct RGB {
     byte blue;
 };
 
-typedef unsigned char Gray;
+typedef unsigned char Intensity;
 
 std::ostream& operator<<(std::ostream &os, const RGB& pixel);
 
@@ -25,7 +25,7 @@ void writePixel(std::ostream &os, const P &pixel) {
     os << pixel;
 }
 
-Gray average(const RGB& rgb);
+Intensity average(const RGB& rgb);
 
 }
 

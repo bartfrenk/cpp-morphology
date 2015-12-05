@@ -4,9 +4,10 @@
 #include <memory>
 #include <iostream>
 
-#include "../image/strict.hpp"
+#include "../image/image.hpp"
 #include "../image/utils.hpp"
 #include "../image/pixel.hpp"
+#include "../image/utils.hpp"
 
 namespace Filter {
 
@@ -24,22 +25,22 @@ Image::StrictImage<Q> apply(const I &img, const K &ker, const Z &zip, const F &f
 {
     Image::Box bounds = ker.box();
 
-    size_t width = img.width();
-    size_t height = img.height();
+    Image::coord_t width = img.width();
+    Image::coord_t height = img.height();
 
     Image::StrictImage<Q> result(width, height);
-    for (size_t img_x = 0; img_x != width; ++img_x) {
-        for (size_t img_y = 0; img_y != height; ++img_y) {
+    for (Image::coord_t img_x = 0; img_x != width; ++img_x) {
+        for (Image::coord_t img_y = 0; img_y != height; ++img_y) {
             P value = unit;
             for (int ker_x = bounds.lo.x; ker_x <= bounds.hi.x; ++ker_x) {
                 for (int ker_y = bounds.lo.y; ker_y <= bounds.hi.y; ++ker_y) {
                     if (img.contains(img_x + ker_x, img_y + ker_y)) {
-                        value = fold(value, zip(img.get(img_x + ker_x, img_y + ker_y),
-                                                ker.get(ker_x, ker_y)));
+                        value = fold(value, zip(img(img_x + ker_x, img_y + ker_y),
+                                                ker(ker_x, ker_y)));
                     }
                 }
             }
-            result.set(img_x, img_y, round(value));
+            result(img_x, img_y) = round(value);
         }
     }
     return result;

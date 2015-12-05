@@ -1,3 +1,7 @@
+* In progress
+** Replace 'width' and 'height' by more general 'domain'
+This unifies the image and kernel interfaces.
 
-* Establish baseline performance profile for 'linear'
-* Implement conversion from binary pixel images to run-length encoded binary images
+* Future
+** Establish baseline performance profile for 'linear'
+** Implement conversion from binary pixel images to run-length encoded binary images
