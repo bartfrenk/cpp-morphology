@@ -22,6 +22,9 @@ protected:
     void init();
     void save(const FREE_IMAGE_FORMAT fif, const std::string filename) const;
 
+    uint32_t width() const;
+    uint32_t height() const;
+
     FIBITMAP *mPixels;
     unsigned int mPitch;
     unsigned int mWidth;

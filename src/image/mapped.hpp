@@ -1,5 +1,5 @@
-#ifndef IMAGE_LAZY_HPP
-#define IMAGE_LAZY_HPP
+#ifndef IMAGE_MAPPED_HPP
+#define IMAGE_MAPPED_HPP
 
 #include <cstddef>
 #include <iostream>
@@ -15,15 +15,15 @@ using Utils::log;
 namespace Image {
 
 template <typename Q, typename I, typename P>
-class LazyImage {
+class Mapped {
 public:
 
     using pixel_t = Q;
     using coord_t = typename I::coord_t;
 
-    LazyImage(std::shared_ptr<I> base, const std::function<Q(P)> func);
-    LazyImage(const LazyImage<Q, I, P> &&img);
-    LazyImage<Q, I, P>& operator=(const LazyImage<Q, I, P> &&img);
+    Mapped(std::shared_ptr<I> base, const std::function<Q(P)> func);
+    Mapped(const Mapped<Q, I, P> &&img);
+    Mapped<Q, I, P>& operator=(const Mapped<Q, I, P> &&img);
 
     bool contains(const coord_t x, const coord_t y) const;
     Domain<coord_t> domain() const;
@@ -38,40 +38,40 @@ private:
 
 
 template <typename Q, typename I, typename P>
-LazyImage<Q, I, P>::LazyImage(std::shared_ptr<I> base, const std::function<Q(P)> func)
+Mapped<Q, I, P>::Mapped(std::shared_ptr<I> base, const std::function<Q(P)> func)
     : mBase(base), mFunc(func)
-{ log << "LazyImage(std::shared_ptr<I>, const std::function<Q(P)>)\n"; };
+{ log << "Mapped(std::shared_ptr<I>, const std::function<Q(P)>)\n"; };
 
 template <typename Q, typename I, typename P>
-LazyImage<Q, I, P>::LazyImage(const LazyImage<Q, I, P> &&img)
+Mapped<Q, I, P>::Mapped(const Mapped<Q, I, P> &&img)
     : mBase(std::move(img.mBase)), mFunc(img.mFunc)
-{ log << "LazyImage(const LazyImage&&)\n"; };
+{ log << "Mapped(const Mapped&&)\n"; };
 
 template <typename Q, typename I, typename P>
-LazyImage<Q, I, P>& LazyImage<Q, I, P>::operator=(const LazyImage<Q, I, P> &&img) {
-    log << "LazyImage::operator=(const LazyImage&&)\n";
+Mapped<Q, I, P>& Mapped<Q, I, P>::operator=(const Mapped<Q, I, P> &&img) {
+    log << "Mapped::operator=(const Mapped&&)\n";
     mBase = std::move(img.mBase);
     mFunc = img.mFunc;
     return *this;
 }
 
 template <typename Q, typename I, typename P>
-bool LazyImage<Q, I, P>::contains(const coord_t x, const coord_t y) const {
+bool Mapped<Q, I, P>::contains(const coord_t x, const coord_t y) const {
     return domain().contains(Point<int>(x, y));
 }
 
 template <typename Q, typename I, typename P>
-Domain<typename LazyImage<Q, I, P>::coord_t> LazyImage<Q, I, P>::domain() const {
+Domain<typename Mapped<Q, I, P>::coord_t> Mapped<Q, I, P>::domain() const {
     return mBase->domain();
 }
 
 template <typename Q, typename I, typename P>
-Q LazyImage<Q, I, P>::operator()(const coord_t x, const coord_t y) const {
+Q Mapped<Q, I, P>::operator()(const coord_t x, const coord_t y) const {
     return mFunc((*mBase)(x, y));
 }
 
 template <typename Q, typename I, typename P>
-Strict<Q, typename I::coord_t> LazyImage<Q, I, P>::manifest() const {
+Strict<Q, typename I::coord_t> Mapped<Q, I, P>::manifest() const {
     Domain<coord_t> dom = domain();
     Point<coord_t> lo = dom.lo;
     Point<coord_t> hi = dom.hi;

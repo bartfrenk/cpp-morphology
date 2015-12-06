@@ -53,4 +53,12 @@ void FreeImage::save(const FREE_IMAGE_FORMAT fif, const std::string filename) co
     FreeImage_Save(fif, mPixels, filename.c_str());
 }
 
+uint32_t FreeImage::width() const {
+    return FreeImage_GetWidth(mPixels);
+}
+
+uint32_t FreeImage::height() const {
+    return FreeImage_GetHeight(mPixels);
+}
+
 }

@@ -1,24 +1,23 @@
 #include "pixel.hpp"
 
 #include <iomanip>
+#include <sstream>
 
 namespace Image {
 
-std::ostream& operator<<(std::ostream& os, const RGB& pixel) {
-    // TODO: avoid changing the format flag
-    os.setf(std::ios::hex, std::ios::basefield);
-    os << "#";
-    os << std::setfill('0') << std::setw(2) << (int) pixel.red;
-    os << std::setfill('0') << std::setw(2) << (int) pixel.green;
-    os << std::setfill('0') << std::setw(2) << (int) pixel.blue;
-    os.unsetf(std::ios::basefield);
-    return os;
+std::string toString(const RGB pixel) {
+    std::stringstream ss;
+    ss << std::hex << "#";
+    ss << std::setfill('0') << std::setw(2) << (int) pixel.red;
+    ss << std::setfill('0') << std::setw(2) << (int) pixel.green;
+    ss << std::setfill('0') << std::setw(2) << (int) pixel.blue;
+    return ss.str();
 }
 
-template <>
-void writePixel<Intensity>(std::ostream &os, const Intensity &pixel) {
-    os.setf(std::ios::hex, std::ios::basefield);
-    os << std::setfill('0') << std::setw(2) << (int) pixel;
+std::string toString(const Intensity pixel) {
+    std::stringstream ss;
+    ss << std::hex << std::setfill('0') << std::setw(2) << (int) pixel;
+    return ss.str();
 }
 
 Intensity average(const RGB& rgb) {

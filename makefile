@@ -1,6 +1,7 @@
 CC = clang++
 LIBS = -lfreeimage
-CFLAGS = -std=c++11 -g
+CFLAGS = -std=c++11 -g -Wall -pg
+LFLAGS = -pg -Wall
 
 SRC_DIR = ./src
 OBJ_DIR = ./obj
@@ -34,11 +35,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 $(BIN_DIR)/test_filter.out: $(OBJECTS)
 	@mkdir -p $(@D)
-	$(CC) -o $@ $^ $(LIBS)
+	$(CC) -o $@ $^ $(LIBS) $(LFLAGS)
 
 ${BIN_DIR}/test_image.out: ${OBJ_DIR}/test_image.o ${OBJ_IMAGE} ${OBJ_UTILS}
 	@mkdir -p ${@D}
-	${CC} -o $@ $^ ${LIBS}
+	${CC} -o $@ $^ ${LIBS} ${LFLAGS}
 
 clean:
 	@rm -rf $(OBJ_DIR) $(BIN_DIR)

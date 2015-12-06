@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "../image/utils.hpp"
-using Image::coord_t;
 
 namespace Filter {
 

@@ -15,6 +15,12 @@ namespace Image {
 using format_t = FREE_IMAGE_FORMAT;
 using Utils::log;
 
+namespace Format {
+extern const FREE_IMAGE_FORMAT PNG;
+extern const FREE_IMAGE_FORMAT BMP;
+}
+
+
 template <typename P, typename T>
 class Strict : public FreeImage {
 public:
@@ -47,25 +53,25 @@ private:
 
 template <typename P, typename T>
 Strict<P, T>::Strict(const Domain<T> domain)
-    : mDomain(domain), FreeImage(width(domain), height(domain), to_bits(bytes_per_pixel)) {
+    : FreeImage(domain.width(), domain.height(), to_bits(bytes_per_pixel)), mDomain(domain) {
     log << "Strict<RGB>::Strict(const coord_t width, const coord_t height)\n";
 };
 
 template <typename P, typename T>
 Strict<P, T>::Strict(const std::string filename, const format_t format)
-    : FreeImage(format, filename) {
+    : FreeImage(format, filename), mDomain(width(), height(), Point<T>(0, 0)) {
     log << "Strict<RGB>::Strict(const std::string)\n";
 };
 
 template <typename P, typename T>
 Strict<P, T>::Strict(const Strict<P, T> &img)
-    : FreeImage(FreeImage_Clone(img.mPixels)) {
+    : FreeImage(FreeImage_Clone(img.mPixels)), mDomain(img.mDomain) {
     log << "Strict<RGB>::Strict(const Strict<RGB>&)\n";
 }
 
 template <typename P, typename T>
 Strict<P, T>::Strict(const Strict<P, T> &&img)
-    : FreeImage(std::move(img)) {
+    : FreeImage(std::move(img)), mDomain(std::move(img.mDomain)) {
     log << "Strict<RGB>::Strict(const Strict<RGB>&&)\n";
 }
 
@@ -88,19 +94,19 @@ template <typename P, typename T>
 P& Strict<P, T>::operator()(const coord_t x, const coord_t y) {
     uint32_t idx = index(x, y);
     BYTE *buffer = (BYTE *) FreeImage_GetBits(mPixels);
-    return (P&) buffer[idx];
+    return *reinterpret_cast<P*>(buffer + idx);
 }
 
 template <typename P, typename T>
 P Strict<P, T>::operator()(const coord_t x, const coord_t y) const {
     uint32_t idx = index(x, y);
     BYTE *buffer = (BYTE *) FreeImage_GetBits(mPixels);
-    return P(buffer + idx);
+    return *reinterpret_cast<P*>(buffer + idx);
 };
 
 template <typename P, typename T>
-uint32_t Strict<P, T>::index(const coord_t x, const coord_t y) const {
-    return (y - mDomain.lo.y) * mPitch + (x - mDomain.lo.x);
+inline uint32_t Strict<P, T>::index(const coord_t x, const coord_t y) const {
+    return (y - mDomain.lo.y) * mPitch + bytes_per_pixel * (x - mDomain.lo.x);
 }
 
 template <typename P, typename T>

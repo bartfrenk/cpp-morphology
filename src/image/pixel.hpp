@@ -1,13 +1,11 @@
 #ifndef IMAGE_PIXEL_HPP
 #define IMAGE_PIXEL_HPP
 
-#include <FreeImage.h>
-#include <iostream>
-#include <iomanip>
+#include <string>
 
 namespace Image {
 
-typedef BYTE byte;
+typedef unsigned char byte;
 
 struct RGB {
     RGB(byte red, byte green, byte blue) : red(red), green(green), blue(blue) {};
@@ -16,14 +14,11 @@ struct RGB {
     byte blue;
 };
 
-typedef unsigned char Intensity;
+typedef byte Intensity;
 
-std::ostream& operator<<(std::ostream &os, const RGB& pixel);
+std::string toString(const RGB pixel);
 
-template <typename P>
-void writePixel(std::ostream &os, const P &pixel) {
-    os << pixel;
-}
+std::string toString(const Intensity pixel);
 
 Intensity average(const RGB& rgb);
 
