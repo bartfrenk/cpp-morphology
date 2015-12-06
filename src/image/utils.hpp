@@ -1,12 +1,12 @@
-#ifndef IMAGE_TRANSFORMS_HPP
-#define IMAGE_TRANSFORMS_HPP
+#ifndef IMAGE_UTILS_HPP
+#define IMAGE_UTILS_HPP
 
 #include <memory>
 #include <iostream>
 #include <iomanip>
 
-#include "mapped.hpp"
 #include "pixel.hpp"
+#include "mapped.hpp"
 
 namespace Image {
 

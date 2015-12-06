@@ -1,5 +1,5 @@
-#ifndef IMAGE_UTILS_HPP
-#define IMAGE_UTILS_HPP
+#ifndef IMAGE_BASE_HPP
+#define IMAGE_BASE_HPP
 
 #include <cstddef>
 #include "../geometry/point.hpp"
